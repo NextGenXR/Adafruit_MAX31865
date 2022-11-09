@@ -46,10 +46,17 @@
 #define RTD_A 3.9083e-3
 #define RTD_B -5.775e-7
 
+#ifdef ARDUINO
 #if (ARDUINO >= 100)
 #include "Arduino.h"
 #else
 #include "WProgram.h"
+#endif
+
+#else
+
+
+
 #endif
 
 #include <Adafruit_SPIDevice.h>

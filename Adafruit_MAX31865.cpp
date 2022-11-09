@@ -12,7 +12,16 @@
 
   Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
+
+  Added STM32 Hardware SPI 2022-10 J. OConnor Microtronix
+
  ****************************************************/
+
+#if __has_include(<main.h>)
+#include <main.h>
+#endif
+
+#ifdef USE_ADAFRUIT_MAX31865
 
 #include "Adafruit_MAX31865.h"
 #ifdef __AVR
@@ -323,3 +332,5 @@ void Adafruit_MAX31865::writeRegister8(uint8_t addr, uint8_t data) {
   uint8_t buffer[2] = {addr, data};
   spi_dev.write(buffer, 2);
 }
+
+#endif // USE_ADAFRUIT_MAX...
