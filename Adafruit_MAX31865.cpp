@@ -21,7 +21,7 @@
 #include <main.h>
 #endif
 
-#ifdef USE_ADAFRUIT_MAX31865
+#ifndef USE_ADAFRUIT_MAX31865x
 
 #include "Adafruit_MAX31865.h"
 #ifdef __AVR
@@ -42,6 +42,7 @@
 */
 /**************************************************************************/
 //
+#ifndef USE_HAL_DRIVER
 Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi,
                                      int8_t spi_miso, int8_t spi_clk)
     : spi_dev(spi_cs, spi_clk, spi_miso, spi_mosi, 1000000,
@@ -56,7 +57,16 @@ Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi,
 /**************************************************************************/
 Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI)
     : spi_dev(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1, theSPI) {}
+#else
 
+Adafruit_MAX31865::Adafruit_MAX31865(SPI_Device_t device);
+{
+	_SS_Pin = device.SS_Pin;
+	_SS_Port = config.SS_Port;
+	_hspi = config.hspi;
+}
+
+#endif
 /**************************************************************************/
 /*!
     @brief Initialize the SPI interface and set the number of RTD wires used

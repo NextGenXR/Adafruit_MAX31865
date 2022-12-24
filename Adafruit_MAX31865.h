@@ -60,6 +60,26 @@
 #endif
 
 #include <Adafruit_SPIDevice.h>
+#include <cstdint>
+#include <cstdbool>
+
+#include <main.h>
+
+#ifdef USE_HAL_DRIVER
+
+#include <CM3KMain.h>
+
+#include <stm32yyxx_hal_def.h>
+#include <stm32yyxx_hal_spi.h>
+#include <stm32yyxx_hal_gpio.h>
+
+extern "C" SPI_HandleTypeDef hspi1;
+extern "C" SPI_HandleTypeDef hspi3;
+extern "C" SPI_HandleTypeDef hspi4;
+extern "C" SPI_HandleTypeDef hspi5;
+
+#endif
+
 
 typedef enum max31865_numwires {
   MAX31865_2WIRE = 0,
@@ -77,9 +97,14 @@ typedef enum {
 /*! Interface class for the MAX31865 RTD Sensor reader */
 class Adafruit_MAX31865 {
 public:
+#ifdef USE_HAL_DRIVERS
   Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso,
                     int8_t spi_clk);
   Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI = &SPI);
+#else
+  Adafruit_MAX31865(SPI_Device_t config);
+
+#endif
 
   bool begin(max31865_numwires_t x = MAX31865_2WIRE);
 
@@ -101,7 +126,15 @@ public:
                              float refResistor);
 
 private:
-  Adafruit_SPIDevice spi_dev;
+//  Adafruit_SPIDevice spi_dev;
+
+  // Passed on to Adafruit_SPI
+	uint16_t _SS_Pin;
+	GPIO_TypeDef*  _SS_Port;
+	SPI_HandleTypeDef *_hspi;
+
+	// RTD Configuration
+	uint8_t _Wires;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
