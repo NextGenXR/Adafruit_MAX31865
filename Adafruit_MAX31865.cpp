@@ -21,9 +21,13 @@
 #include <main.h>
 #endif
 
-#ifndef USE_ADAFRUIT_MAX31865x
+#if __has_include(<Defines.h>)
+#include <Defines.h>
+#endif
+
 
 #include "Adafruit_MAX31865.h"
+
 #ifdef __AVR
 #include <avr/pgmspace.h>
 #elif defined(ESP8266)

@@ -102,7 +102,7 @@ public:
                     int8_t spi_clk);
   Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI = &SPI);
 #else
-  Adafruit_MAX31865(SPI_Device_t config);
+  Adafruit_MAX31865(SPI_Device_t *config);
 
 #endif
 
