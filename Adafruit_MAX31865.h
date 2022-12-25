@@ -97,7 +97,7 @@ typedef enum {
 /*! Interface class for the MAX31865 RTD Sensor reader */
 class Adafruit_MAX31865 {
 public:
-#ifdef USE_HAL_DRIVERS
+#ifndef USE_HAL_DRIVER
   Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso,
                     int8_t spi_clk);
   Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI = &SPI);
