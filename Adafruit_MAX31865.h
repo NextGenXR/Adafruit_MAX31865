@@ -100,34 +100,34 @@ typedef enum {
 /*! Interface class for the MAX31865 RTD Sensor reader */
 class Adafruit_MAX31865 {
 public:
+
 #ifndef USE_HAL_DRIVER
   Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk);
   Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI); // = &SPI);
-#else
-    Adafruit_MAX31865(int8_t spi_cs, SPI_HandleTypeDef *hspi);
 #endif
 
-  bool begin(max31865_numwires_t x = MAX31865_2WIRE);
+	Adafruit_MAX31865(SPI_Device_t device);
 
-  uint8_t readFault(max31865_fault_cycle_t fault_cycle = MAX31865_FAULT_AUTO);
-  void clearFault(void);
-  uint16_t readRTD();
+	bool begin(max31865_numwires_t x = MAX31865_2WIRE);
 
-  void setThresholds(uint16_t lower, uint16_t upper);
-  uint16_t getLowerThreshold(void);
-  uint16_t getUpperThreshold(void);
+	uint8_t readFault(max31865_fault_cycle_t fault_cycle = MAX31865_FAULT_AUTO);
+	void clearFault(void);
+	uint16_t readRTD();
 
-  void setWires(max31865_numwires_t wires);
-  void autoConvert(bool b);
-  void enable50Hz(bool b);
-  void enableBias(bool b);
+	void setThresholds(uint16_t lower, uint16_t upper);
+	uint16_t getLowerThreshold(void);
+	uint16_t getUpperThreshold(void);
 
-  float temperature(float RTDnominal, float refResistor);
-  float calculateTemperature(uint16_t RTDraw, float RTDnominal,
-                             float refResistor);
+	void setWires(max31865_numwires_t wires);
+	void autoConvert(bool b);
+	void enable50Hz(bool b);
+	void enableBias(bool b);
+
+	float temperature(float RTDnominal, float refResistor);
+	float calculateTemperature(uint16_t RTDraw, float RTDnominal, float refResistor);
 
 private:
-//  Adafruit_SPIDevice spi_dev;
+  Adafruit_SPIDevice *spi_dev;
 
   // Passed on to Adafruit_SPI
 	uint16_t _SS_Pin;
@@ -139,7 +139,6 @@ private:
 
   int8_t _spi_cs;
   DataPin _data_pin;
-  SPI_HandleTypeDef *_hspi;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 

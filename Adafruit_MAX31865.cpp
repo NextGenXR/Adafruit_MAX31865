@@ -17,12 +17,16 @@
 
  ****************************************************/
 
+
 #if __has_include(<main.h>)
 #include <main.h>
 #endif
 
 #include <Defines.h>
-#include VARIANT_H
+
+#if __has_include(VARIANT_H)
+    #include VARIANT_H
+#endif
 
 #ifdef USE_ADAFRUIT_MAX31865
 
@@ -34,7 +38,8 @@
 #include <pgmspace.h>
 #endif
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdint>
 
 /**************************************************************************/
 /*!
@@ -61,19 +66,18 @@ Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi,
 /**************************************************************************/
 Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI)
     : spi_dev(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1, theSPI) {}
-#else
+#endif
 
-Adafruit_MAX31865::Adafruit_MAX31865(uint8_t spi_cs, SPI_HandleTypeDef *hspi)
+Adafruit_MAX31865::Adafruit_MAX31865(SPI_Device_t device)
 {
-	_hspi = hspi;
+	_hspi = device.hspi;
+
+	spi_dev = new Adafruit_SPIDevice(device);
 
 
 }
 #endif // USE_HAL
 
-}
-
-#endif
 /**************************************************************************/
 /*!
     @brief Initialize the SPI interface and set the number of RTD wires used
@@ -83,7 +87,7 @@ Adafruit_MAX31865::Adafruit_MAX31865(uint8_t spi_cs, SPI_HandleTypeDef *hspi)
 */
 /**************************************************************************/
 bool Adafruit_MAX31865::begin(max31865_numwires_t wires) {
-  spi_dev.begin();
+  spi_dev->begin();
 
   setWires(wires);
   enableBias(false);
@@ -362,14 +366,12 @@ void Adafruit_MAX31865::readRegisterN(uint8_t addr, uint8_t buffer[],
                                       uint8_t n) {
   addr &= 0x7F; // make sure top bit is not set
 
-  spi_dev.write_then_read(&addr, 1, buffer, n);
+  spi_dev->write_then_read(&addr, 1, buffer, n);
 }
 
 void Adafruit_MAX31865::writeRegister8(uint8_t addr, uint8_t data) {
   addr |= 0x80; // make sure top bit is set
 
   uint8_t buffer[2] = {addr, data};
-  spi_dev.write(buffer, 2);
+  spi_dev->write(buffer, 2);
 }
-
-#endif // USE_ADAFRUIT_MAX...
