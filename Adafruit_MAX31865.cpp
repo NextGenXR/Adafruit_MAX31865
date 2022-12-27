@@ -21,10 +21,10 @@
 #include <main.h>
 #endif
 
-#if __has_include(<Defines.h>)
 #include <Defines.h>
-#endif
+#include VARIANT_H
 
+#ifdef USE_ADAFRUIT_MAX31865
 
 #include "Adafruit_MAX31865.h"
 
@@ -63,11 +63,13 @@ Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI)
     : spi_dev(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1, theSPI) {}
 #else
 
-Adafruit_MAX31865::Adafruit_MAX31865(SPI_Device_t *device);
+Adafruit_MAX31865::Adafruit_MAX31865(uint8_t spi_cs, SPI_HandleTypeDef *hspi)
 {
-	_SS_Pin = device->SS_Pin;
-	_SS_Port = config->SS_Port;
-	_hspi = config->hspi;
+	_hspi = hspi;
+
+
+}
+#endif // USE_HAL
 
 }
 

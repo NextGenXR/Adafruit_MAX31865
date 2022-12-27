@@ -53,12 +53,12 @@
 #include "WProgram.h"
 #endif
 
-#else
-
-
 
 #endif
 
+#include <stm32yyxx_hal_spi.h>
+#include VARIANT_H
+#include <ArduinoDPins.h>
 #include <Adafruit_SPIDevice.h>
 #include <cstdint>
 #include <cstdbool>
@@ -81,6 +81,9 @@ extern "C" SPI_HandleTypeDef hspi5;
 #endif
 
 
+
+extern "C" SPI_HandleTypeDef hspi1;
+
 typedef enum max31865_numwires {
   MAX31865_2WIRE = 0,
   MAX31865_3WIRE = 1,
@@ -98,12 +101,10 @@ typedef enum {
 class Adafruit_MAX31865 {
 public:
 #ifndef USE_HAL_DRIVER
-  Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso,
-                    int8_t spi_clk);
-  Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI = &SPI);
+  Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk);
+  Adafruit_MAX31865(int8_t spi_cs, SPIClass *theSPI); // = &SPI);
 #else
-  Adafruit_MAX31865(SPI_Device_t *config);
-
+    Adafruit_MAX31865(int8_t spi_cs, SPI_HandleTypeDef *hspi);
 #endif
 
   bool begin(max31865_numwires_t x = MAX31865_2WIRE);
@@ -135,6 +136,10 @@ private:
 
 	// RTD Configuration
 	uint8_t _Wires;
+
+  int8_t _spi_cs;
+  DataPin _data_pin;
+  SPI_HandleTypeDef *_hspi;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
