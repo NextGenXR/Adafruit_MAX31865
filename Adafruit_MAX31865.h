@@ -1,17 +1,17 @@
 /***************************************************
-  This is a library for the Adafruit PT100/P1000 RTD Sensor w/MAX31865
+ This is a library for the Adafruit PT100/P1000 RTD Sensor w/MAX31865
 
-  Designed specifically to work with the Adafruit RTD Sensor
-  ----> https://www.adafruit.com/products/3328
+ Designed specifically to work with the Adafruit RTD Sensor
+ ----> https://www.adafruit.com/products/3328
 
-  This sensor uses SPI to communicate, 4 pins are required to
-  interface
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
+ This sensor uses SPI to communicate, 4 pins are required to
+ interface
+ Adafruit invests time and resources providing this open source code,
+ please support Adafruit and open-source hardware by purchasing
+ products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
+ Written by Limor Fried/Ladyada for Adafruit Industries.
+ BSD license, all text above must be included in any redistribution
  ****************************************************/
 
 #ifndef ADAFRUIT_MAX31865_H
@@ -56,12 +56,12 @@
 
 #endif
 
-#include <stm32yyxx_hal_spi.h>
+#include "stm32yyxx_hal_spi.h"
 #include VARIANT_H
 #include <ArduinoDPins.h>
 #include <Adafruit_SPIDevice.h>
-#include <cstdint>
-#include <cstdbool>
+#include <stdint.h>
+#include <stdbool.h>
 
 #include <main.h>
 
@@ -80,21 +80,17 @@ extern "C" SPI_HandleTypeDef hspi5;
 
 #endif
 
-
-
 extern "C" SPI_HandleTypeDef hspi1;
 
 typedef enum max31865_numwires {
-  MAX31865_2WIRE = 0,
-  MAX31865_3WIRE = 1,
-  MAX31865_4WIRE = 0
+	MAX31865_2WIRE = 0, MAX31865_3WIRE = 1, MAX31865_4WIRE = 0
 } max31865_numwires_t;
 
 typedef enum {
-  MAX31865_FAULT_NONE = 0,
-  MAX31865_FAULT_AUTO,
-  MAX31865_FAULT_MANUAL_RUN,
-  MAX31865_FAULT_MANUAL_FINISH
+	MAX31865_FAULT_NONE = 0,
+	MAX31865_FAULT_AUTO,
+	MAX31865_FAULT_MANUAL_RUN,
+	MAX31865_FAULT_MANUAL_FINISH
 } max31865_fault_cycle_t;
 
 /*! Interface class for the MAX31865 RTD Sensor reader */
@@ -124,28 +120,29 @@ public:
 	void enableBias(bool b);
 
 	float temperature(float RTDnominal, float refResistor);
-	float calculateTemperature(uint16_t RTDraw, float RTDnominal, float refResistor);
+	float calculateTemperature(uint16_t RTDraw, float RTDnominal,
+			float refResistor);
 
 private:
-  Adafruit_SPIDevice *spi_dev;
+	Adafruit_SPIDevice *spi_dev;
 
-  // Passed on to Adafruit_SPI
+	// Passed on to Adafruit_SPI
 	uint16_t _SS_Pin;
-	GPIO_TypeDef*  _SS_Port;
+	GPIO_TypeDef *_SS_Port;
 	SPI_HandleTypeDef *_hspi;
 
 	// RTD Configuration
 	uint8_t _Wires;
 
-  int8_t _spi_cs;
-  DataPin _data_pin;
+	int8_t _spi_cs;
+	DataPin _data_pin;
 
-  void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
+	void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
-  uint8_t readRegister8(uint8_t addr);
-  uint16_t readRegister16(uint8_t addr);
+	uint8_t readRegister8(uint8_t addr);
+	uint16_t readRegister16(uint8_t addr);
 
-  void writeRegister8(uint8_t addr, uint8_t reg);
+	void writeRegister8(uint8_t addr, uint8_t reg);
 };
 
 #endif
