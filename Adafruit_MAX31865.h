@@ -5,7 +5,7 @@
  ----> https://www.adafruit.com/products/3328
 
  This sensor uses SPI to communicate, 4 pins are required to
- interface
+ interface.
  Adafruit invests time and resources providing this open source code,
  please support Adafruit and open-source hardware by purchasing
  products from Adafruit!
@@ -13,6 +13,11 @@
  Written by Limor Fried/Ladyada for Adafruit Industries.
  BSD license, all text above must be included in any redistribution
  ****************************************************/
+
+/*
+ * Modified for STM32 HAL-only operation.
+ * JOConnor @ NextGenXR 04-2023
+ */
 
 #ifndef ADAFRUIT_MAX31865_H
 #define ADAFRUIT_MAX31865_H
@@ -53,13 +58,13 @@
 #include "WProgram.h"
 #endif
 
-
 #endif
 
 #include "stm32yyxx_hal_spi.h"
-#include VARIANT_H
-#include <ArduinoDPins.h>
-#include <Adafruit_SPIDevice.h>
+// #include VARIANT_H
+// #include <ArduinoDPins.h>
+// #include <Adafruit_SPIDevice.h>
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -69,16 +74,15 @@
 
 #include <CM3KMain.h>
 
+
 #include <stm32yyxx_hal_def.h>
 #include <stm32yyxx_hal_spi.h>
 #include <stm32yyxx_hal_gpio.h>
 
-extern "C" SPI_HandleTypeDef hspi1;
-extern "C" SPI_HandleTypeDef hspi3;
-extern "C" SPI_HandleTypeDef hspi4;
-extern "C" SPI_HandleTypeDef hspi5;
+#include <MAX31865_config.h>
 
-#endif
+
+#endif /* USE_HAL */
 
 extern "C" SPI_HandleTypeDef hspi1;
 

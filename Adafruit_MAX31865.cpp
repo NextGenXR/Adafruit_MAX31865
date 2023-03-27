@@ -17,18 +17,27 @@
 
  ****************************************************/
 
+/*
+ * Modified for STM32 HAL-only operation.
+ * JOConnor @ NextGenXR 04-2023
+ *
+ *
+ *
+ */
+
 
 #if __has_include(<main.h>)
 #include <main.h>
 #endif
 
-#include <Defines.h>
-
-#if __has_include(VARIANT_H)
-    #include VARIANT_H
+#if __has_include(<CCS_config.h>)
+#include <CCS_config.h>
 #endif
 
-#ifdef USE_ADAFRUIT_MAX31865
+#include <MAX31865_config.h>
+
+
+#ifdef USE_HAL_DRIVER
 
 #include "Adafruit_MAX31865.h"
 
@@ -72,8 +81,8 @@ Adafruit_MAX31865::Adafruit_MAX31865(SPI_Device_t device)
 {
 	_hspi = device.hspi;
 
+	// TODO: Switch to Pure HAL. Eliminate?
 	spi_dev = new Adafruit_SPIDevice(device);
-
 
 }
 #endif // USE_HAL
