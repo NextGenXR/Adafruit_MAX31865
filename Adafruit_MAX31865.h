@@ -61,9 +61,9 @@
 #endif
 
 #include "stm32yyxx_hal_spi.h"
-// #include VARIANT_H
-// #include <ArduinoDPins.h>
-// #include <Adafruit_SPIDevice.h>
+#include VARIANT_H
+#include <ArduinoDPins.h>
+#include <Adafruit_SPIDevice.h>
 
 #include <stdint.h>
 #include <stdbool.h>
